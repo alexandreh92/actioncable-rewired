@@ -13,7 +13,7 @@ import adapters from './adapters';
 //
 
 export interface Logger {
-  log: (...messages: number[] & string[]) => void;
+  log: (...messages: unknown[]) => void;
   enabled?: boolean;
 }
 

@@ -1,6 +1,11 @@
-import Subscription from "./subscription";
-import SubscriptionGuarantor from "./subscription_guarantor";
-import logger from "./logger";
+import Subscription from './subscription';
+import SubscriptionGuarantor from './subscription_guarantor';
+import logger from './logger';
+import Consumer from './consumer';
+import INTERNAL from './internal';
+import type { Commands } from './internal';
+
+const { commands } = INTERNAL;
 
 // Collection class for creating (and internally managing) channel subscriptions.
 // The only method intended to be triggered by the user is ActionCable.Subscriptions#create,
@@ -13,96 +18,104 @@ import logger from "./logger";
 // For more details on how you'd configure an actual channel subscription, see ActionCable.Subscription.
 
 export default class Subscriptions {
-  constructor(consumer) {
+  consumer: Consumer;
+  guarantor: SubscriptionGuarantor;
+  subscriptions: Subscription[];
+
+  constructor(consumer: Consumer) {
     this.consumer = consumer;
     this.guarantor = new SubscriptionGuarantor(this);
     this.subscriptions = [];
   }
 
-  create(channelName, mixin) {
+  create(
+    channelName: string | Record<string, unknown>,
+    mixin: any,
+  ): Subscription {
     const channel = channelName;
-    const params = typeof channel === "object" ? channel : { channel };
+    const params = typeof channel === 'object' ? channel : { channel };
     const subscription = new Subscription(this.consumer, params, mixin);
     return this.add(subscription);
   }
 
   // Private
 
-  add(subscription) {
+  add(subscription: Subscription): Subscription {
     this.subscriptions.push(subscription);
     this.consumer.ensureActiveConnection();
-    this.notify(subscription, "initialized");
+    this.notify(subscription, 'initialized');
     this.subscribe(subscription);
     return subscription;
   }
 
-  remove(subscription) {
+  remove(subscription: Subscription): Subscription {
     this.forget(subscription);
     if (!this.findAll(subscription.identifier).length) {
-      this.sendCommand(subscription, "unsubscribe");
+      this.sendCommand(subscription, commands.UNSUBSCRIBE);
     }
     return subscription;
   }
 
-  reject(identifier) {
+  reject(identifier: string): Subscription[] {
     return this.findAll(identifier).map((subscription) => {
       this.forget(subscription);
-      this.notify(subscription, "rejected");
+      this.notify(subscription, 'rejected');
       return subscription;
     });
   }
 
-  forget(subscription) {
+  forget(subscription: Subscription): Subscription {
     this.guarantor.forget(subscription);
     this.subscriptions = this.subscriptions.filter((s) => s !== subscription);
     return subscription;
   }
 
-  findAll(identifier) {
+  findAll(identifier: string): Subscription[] {
     return this.subscriptions.filter((s) => s.identifier === identifier);
   }
 
-  reload() {
+  reload(): void[] {
     return this.subscriptions.map((subscription) =>
-      this.subscribe(subscription)
+      this.subscribe(subscription),
     );
   }
 
-  notifyAll(callbackName, ...args) {
+  notifyAll(callbackName: string, ...args: any[]) {
     return this.subscriptions.map((subscription) =>
-      this.notify(subscription, callbackName, ...args)
+      this.notify(subscription, callbackName, ...args),
     );
   }
 
-  notify(subscription, callbackName, ...args) {
+  notify(subscription: Subscription, callbackName: string, ...args: any[]) {
     let subscriptions;
-    if (typeof subscription === "string") {
+    if (typeof subscription === 'string') {
       subscriptions = this.findAll(subscription);
     } else {
       subscriptions = [subscription];
     }
 
-    return subscriptions.map((subscription) =>
-      typeof subscription[callbackName] === "function"
-        ? subscription[callbackName](...args)
-        : undefined
-    );
+    return subscriptions.map((sub) => {
+      if (typeof sub[callbackName] === 'function') {
+        return sub[callbackName](...args);
+      }
+      return undefined;
+    });
   }
 
-  subscribe(subscription) {
-    if (this.sendCommand(subscription, "subscribe")) {
+  subscribe(subscription: Subscription) {
+    if (this.sendCommand(subscription, commands.SUBSCRIBE)) {
       this.guarantor.guarantee(subscription);
     }
   }
 
-  confirmSubscription(identifier) {
+  confirmSubscription(identifier: string) {
     logger.log(`Subscription confirmed ${identifier}`);
     this.findAll(identifier).map((subscription) =>
-      this.guarantor.forget(subscription)
+      this.guarantor.forget(subscription),
     );
   }
 
-  sendCommand(subscription, command) {
+  sendCommand(subscription: Subscription, command: Commands) {
     const { identifier } = subscription;
     return this.consumer.send({ command, identifier });
   }

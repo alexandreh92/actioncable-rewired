@@ -1,3 +1,9 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable padded-blocks */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 // A new subscription is created through the ActionCable.Subscriptions instance available on the consumer.
 // It provides a number of callbacks and a method for calling remote procedure calls on the corresponding
 // Channel instance on the server side.
@@ -56,9 +62,12 @@
 // The "AppearanceChannel" name is automatically mapped between the client-side subscription creation and the server-side Ruby class name.
 // The AppearanceChannel#appear/away public methods are exposed automatically to client-side invocation through the perform method.
 
-const extend = function (object, properties) {
+import Consumer from './consumer';
+
+// @ts-ignore
+const extend = (object, properties) => {
   if (properties != null) {
-    for (let key in properties) {
+    for (const key in properties) {
       const value = properties[key];
       object[key] = value;
     }
@@ -67,27 +76,36 @@ const extend = function (object, properties) {
 };
 
 export default class Subscription {
-  constructor(consumer, params = {}, mixin) {
+  consumer: Consumer;
+  identifier: string;
+
+  constructor(
+    consumer: Consumer,
+    // eslint-disable-next-line default-param-last
+    params: Record<string, unknown> = {},
+    mixin: Record<string, unknown>,
+  ) {
     this.consumer = consumer;
     this.identifier = JSON.stringify(params);
     extend(this, mixin);
   }
 
   // Perform a channel action with the optional data passed as an attribute
-  perform(action, data = {}) {
-    data.action = action;
-    return this.send(data);
+  perform(action: string, data: Record<string, unknown> = {}): boolean {
+    const newData = data;
+    newData.action = action;
+    return this.send(newData);
   }
 
-  send(data) {
+  send(data: Record<string, unknown>): boolean {
     return this.consumer.send({
-      command: "message",
+      command: 'message',
       identifier: this.identifier,
       data: JSON.stringify(data),
     });
   }
 
-  unsubscribe() {
+  unsubscribe(): Subscription {
     return this.consumer.subscriptions.remove(this);
   }
 }

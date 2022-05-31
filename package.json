@@ -37,6 +37,7 @@
     "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\""
   },
   "dependencies": {
+    "@types/websocket": "^1.0.5",
     "websocket": "^1.0.34"
   },
   "devDependencies": {

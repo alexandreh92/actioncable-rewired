@@ -1,9 +1,10 @@
-import { w3cwebsocket as WebSocket } from "websocket";
+/* eslint-disable camelcase */
+import { w3cwebsocket as WebSocket } from 'websocket';
 
-import ConnectionMonitor from "./connection_monitor";
+import ConnectionMonitor from './connection_monitor';
 
-import logger from "./logger";
-import INTERNAL from "./internal";
+import logger from './logger';
+import INTERNAL from './internal';
 
 const { message_types, protocols } = INTERNAL;
 const supportedProtocols = protocols.slice(0, protocols.length - 1);
@@ -16,39 +17,36 @@ export const CONNECTION_STATE = {
   CLOSED: 3,
 };
 
-export const CONNECTION_STATE_MAPPING = Object.entries(CONNECTION_STATE).reduce(
-  (acc, [key, value]) => {
-    acc[value] = key;
-    return acc;
-  },
-  {}
-);
-
-const indexOf = [].indexOf;
-
 export default class Connection {
-  constructor(consumer) {
+  consumer: Consumer;
+  subscriptions: Subscriptions;
+  disconnected: boolean;
+  monitor: ConnectionMonitor;
+  webSocket?: WebSocket;
+  events: Events;
+
+  constructor(consumer: Consumer) {
     this.open = this.open.bind(this);
     this.consumer = consumer;
     this.subscriptions = this.consumer.subscriptions;
     this.disconnected = true;
     this.monitor = new ConnectionMonitor(this);
     this.webSocket = undefined;
+    this.events = {} as Events;
   }
 
-  send(data) {
+  send(data: Record<string, unknown>) {
     if (this.isOpen()) {
-      this.webSocket.send(JSON.stringify(data));
+      this.webSocket?.send(JSON.stringify(data));
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   open() {
     if (this.isActive()) {
       logger.log(
-        `Attempted to open WebSocket, but existing socket is ${this.getState()}`
+        `Attempted to open WebSocket, but existing socket is ${this.getState()}`,
       );
       return false;
     }
@@ -58,7 +56,7 @@ export default class Connection {
     }
 
     logger.log(
-      `Opening WebSocket, current state is ${this.getState()}, subprotocols: ${protocols}`
+      `Opening WebSocket, current state is ${this.getState()}, subprotocols: ${protocols}`,
     );
     this.webSocket = new WebSocket(this.consumer.url, defaultProtocol);
     this.installEventHandlers();
@@ -71,8 +69,9 @@ export default class Connection {
       this.monitor.stop();
     }
     if (this.isOpen()) {
-      return this.webSocket?.close();
+      this.webSocket?.close();
     }
+    return undefined;
   }
 
   reopen() {
@@ -81,7 +80,7 @@ export default class Connection {
       try {
         return this.close();
       } catch (error) {
-        logger.log("Failed to reopen WebSocket", error);
+        logger.log('Failed to reopen WebSocket', error);
       } finally {
         logger.log(`Reopening WebSocket in ${this.constructor.reopenDelay}ms`);
         setTimeout(this.open, this.constructor.reopenDelay);
@@ -92,9 +91,7 @@ export default class Connection {
   }
 
   getProtocol() {
-    if (this.webSocket) {
-      return this.webSocket.protocol;
-    }
+    return this.webSocket?.protocol;
   }
 
   isOpen() {
@@ -108,7 +105,9 @@ export default class Connection {
   // Private
 
   isProtocolSupported() {
-    return indexOf.call(supportedProtocols, this.getProtocol()) >= 0;
+    return supportedProtocols.some(
+      (protocol) => protocol === this.getProtocol(),
+    );
   }
 
   isState(...states) {
@@ -120,14 +119,14 @@ export default class Connection {
   }
 
   installEventHandlers() {
-    for (let eventName in this.events) {
+    for (const eventName in this.events) {
       const handler = this.events[eventName].bind(this);
       this.webSocket[`on${eventName}`] = handler;
     }
   }
 
   uninstallEventHandlers() {
-    for (let eventName in this.events) {
+    for (const eventName in this.events) {
       this.webSocket[`on${eventName}`] = () => undefined;
     }
   }
@@ -135,12 +134,12 @@ export default class Connection {
 
 Connection.prototype.events = {
   message(event) {
-    if (!this.isProtocolSupported()) {
+    if (!this.isProtocolSupported?.()) {
       return;
     }
 
     const { identifier, message, reason, reconnect, type } = JSON.parse(
-      event.data
+      event.data,
     );
     switch (type) {
       case message_types.welcome:
@@ -153,40 +152,41 @@ Connection.prototype.events = {
         return this.monitor.recordPing();
       case message_types.confirmation:
         this.subscriptions.confirmSubscription(identifier);
-        return this.subscriptions.notify(identifier, "connected");
+        return this.subscriptions.notify(identifier, 'connected');
       case message_types.rejection:
         return this.subscriptions.reject(identifier);
       default:
-        return this.subscriptions.notify(identifier, "received", message);
+        return this.subscriptions.notify(identifier, 'received', message);
     }
   },
 
   open() {
     logger.log(
-      `WebSocket onopen event, using '${this.getProtocol()}' subprotocol`
+      `WebSocket onopen event, using '${this.getProtocol()}' subprotocol`,
     );
     this.disconnected = false;
     if (!this.isProtocolSupported()) {
       logger.log(
-        "Protocol is unsupported. Stopping monitor and disconnecting."
+        'Protocol is unsupported. Stopping monitor and disconnecting.',
       );
-      return this.close({ allowReconnect: false });
+      this.close({ allowReconnect: false });
     }
+    return undefined;
   },
 
   close() {
-    logger.log("WebSocket onclose event");
+    logger.log('WebSocket onclose event');
     if (this.disconnected) {
       return;
     }
     this.disconnected = true;
     this.monitor.recordDisconnect();
-    return this.subscriptions.notifyAll("disconnected", {
+    this.subscriptions.notifyAll('disconnected', {
       willAttemptReconnect: this.monitor.isRunning(),
     });
   },
 
   error() {
-    logger.log("WebSocket onerror event");
+    logger.log('WebSocket onerror event');
   },
 };

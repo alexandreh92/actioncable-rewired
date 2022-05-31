@@ -1,19 +1,33 @@
-import logger from "./logger";
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable no-restricted-globals */
+import logger from './logger';
 
 // Responsible for ensuring the cable connection is in good health by validating the heartbeat pings sent from the server, and attempting
 // revival reconnections if things go astray. Internal class, not intended for direct user manipulation.
 
 const now = () => new Date().getTime();
 
-const secondsSince = (time) => (now() - time) / 1000;
+const secondsSince = (time: number) => (now() - time) / 1000;
 
-const isServer = () => typeof window === "undefined";
+const isServer = () => typeof window === 'undefined';
 
 class ConnectionMonitor {
-  constructor(connection) {
+  connection: Connection;
+  reconnectAttempts: number;
+  startedAt?: number;
+  stoppedAt?: number;
+  pingedAt?: number;
+  disconnectedAt?: number;
+  pollTimeout?: NodeJS.Timeout;
+  staleThreshold: number;
+  reconnectionBackoffRate: number;
+
+  constructor(connection: Connection) {
     this.visibilityDidChange = this.visibilityDidChange.bind(this);
     this.connection = connection;
     this.reconnectAttempts = 0;
+    this.staleThreshold = 6;
+    this.reconnectionBackoffRate = 0.15;
   }
 
   start() {
@@ -23,10 +37,10 @@ class ConnectionMonitor {
       this.startPolling();
 
       if (!isServer()) {
-        addEventListener("visibilitychange", this.visibilityDidChange);
+        addEventListener('visibilitychange', this.visibilityDidChange);
       }
       logger.log(
-        `ConnectionMonitor started. stale threshold = ${this.constructor.staleThreshold} s`
+        `ConnectionMonitor started. stale threshold = ${this.staleThreshold} s`,
       );
     }
   }
@@ -35,8 +49,8 @@ class ConnectionMonitor {
     if (this.isRunning()) {
       this.stoppedAt = now();
       this.stopPolling();
-      removeEventListener("visibilitychange", this.visibilityDidChange);
-      logger.log("ConnectionMonitor stopped");
+      removeEventListener('visibilitychange', this.visibilityDidChange);
+      logger.log('ConnectionMonitor stopped');
     }
   }
 
@@ -52,12 +66,12 @@ class ConnectionMonitor {
     this.reconnectAttempts = 0;
     this.recordPing();
     delete this.disconnectedAt;
-    logger.log("ConnectionMonitor recorded connect");
+    logger.log('ConnectionMonitor recorded connect');
   }
 
   recordDisconnect() {
     this.disconnectedAt = now();
-    logger.log("ConnectionMonitor recorded disconnect");
+    logger.log('ConnectionMonitor recorded disconnect');
   }
 
   // Private
@@ -79,11 +93,9 @@ class ConnectionMonitor {
   }
 
   getPollInterval() {
-    const { staleThreshold, reconnectionBackoffRate } = this.constructor;
-    const backoff = Math.pow(
-      1 + reconnectionBackoffRate,
-      Math.min(this.reconnectAttempts, 10)
-    );
+    const { staleThreshold, reconnectionBackoffRate } = this;
+    const backoff =
+      (1 + reconnectionBackoffRate) ** Math.min(this.reconnectAttempts, 10);
     const jitterMax =
       this.reconnectAttempts === 0 ? 1.0 : reconnectionBackoffRate;
     const jitter = jitterMax * Math.random();
@@ -96,18 +108,18 @@ class ConnectionMonitor {
         `ConnectionMonitor detected stale connection. reconnectAttempts = ${
           this.reconnectAttempts
         }, time stale = ${secondsSince(
-          this.refreshedAt
-        )} s, stale threshold = ${this.constructor.staleThreshold} s`
+          this.refreshedAt!,
+        )} s, stale threshold = ${this.staleThreshold} s`,
       );
-      this.reconnectAttempts++;
+      this.reconnectAttempts += 1;
       if (this.disconnectedRecently()) {
         logger.log(
           `ConnectionMonitor skipping reopening recent disconnect. time disconnected = ${secondsSince(
-            this.disconnectedAt
-          )} s`
+            this.disconnectedAt!,
+          )} s`,
         );
       } else {
-        logger.log("ConnectionMonitor reopening");
+        logger.log('ConnectionMonitor reopening');
         this.connection.reopen();
       }
     }
@@ -118,22 +130,24 @@ class ConnectionMonitor {
   }
 
   connectionIsStale() {
-    return secondsSince(this.refreshedAt) > this.constructor.staleThreshold;
+    return (
+      this.refreshedAt && secondsSince(this.refreshedAt) > this.staleThreshold
+    );
   }
 
   disconnectedRecently() {
     return (
       this.disconnectedAt &&
-      secondsSince(this.disconnectedAt) < this.constructor.staleThreshold
+      secondsSince(this.disconnectedAt) < this.staleThreshold
     );
   }
 
   visibilityDidChange() {
-    if (document.visibilityState === "visible") {
+    if (document.visibilityState === 'visible') {
       setTimeout(() => {
         if (this.connectionIsStale() || !this.connection.isOpen()) {
           logger.log(
-            `ConnectionMonitor reopening stale connection on visibilitychange. visibilityState = ${document.visibilityState}`
+            `ConnectionMonitor reopening stale connection on visibilitychange. visibilityState = ${document.visibilityState}`,
           );
           this.connection.reopen();
         }
@@ -141,8 +155,5 @@ class ConnectionMonitor {
     }
   }
 }
-
-ConnectionMonitor.staleThreshold = 6; // Server::Connections::BEAT_INTERVAL * 2 (missed two pings)
-ConnectionMonitor.reconnectionBackoffRate = 0.15;
 
 export default ConnectionMonitor;
