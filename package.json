@@ -36,7 +36,9 @@
     "preview": "vite preview",
     "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\""
   },
-  "dependencies": {},
+  "dependencies": {
+    "websocket": "^1.0.34"
+  },
   "devDependencies": {
     "@types/node": "^17.0.36",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
@@ -58,5 +60,7 @@
     "vite-plugin-dts": "^1.2.0",
     "vite-plugin-eslint": "^1.6.1"
   },
-  "peerDependencies": {}
+  "peerDependencies": {
+    "websocket": "^1.0.34"
+  }
 }
