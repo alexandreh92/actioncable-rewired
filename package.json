@@ -1,0 +1,62 @@
+{
+  "name": "actioncable-rewired",
+  "private": false,
+  "version": "0.0.2",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/actioncable-rewired.umd.js",
+  "module": "./dist/actioncable-rewired.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/actioncable-rewired.es.js",
+      "require": "./dist/actioncable-rewired.umd.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexandreh92/actioncable-rewired.git"
+  },
+  "keywords": [
+    "actioncable",
+    "websockets",
+    "rails",
+    "action-cable",
+    "rails actioncable"
+  ],
+  "bugs": {
+    "url": "https://github.com/alexandreh92/actioncable-rewired/issues"
+  },
+  "homepage": "https://github.com/alexandreh92/actioncable-rewired#readme",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\""
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^17.0.36",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "eslint": "^8.16.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^2.7.1",
+    "eslint-import-resolver-vite": "^1.0.3",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.30.0",
+    "eslint-plugin-react-hooks": "^4.5.0",
+    "json": "^11.0.0",
+    "prettier": "^2.6.2",
+    "typescript": "^4.6.3",
+    "vite": "^2.9.9",
+    "vite-plugin-dts": "^1.2.0",
+    "vite-plugin-eslint": "^1.6.1"
+  },
+  "peerDependencies": {}
+}
