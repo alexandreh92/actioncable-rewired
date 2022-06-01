@@ -6,4 +6,4 @@ type CreateConsumer = (url: string) => Consumer;
 
 export const createConsumer: CreateConsumer = (url) => new Consumer(url);
 
-export const foo = 'fffdffafsafsafsfsfas)))';
+export const foo = 'fasfas';

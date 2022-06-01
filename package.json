@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "start": "nps",
+    "build": "nps",
     "postinstall": "husky install && lerna link"
   },
   "workspaces": [

@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "baseUrl": "./packages",
+    "paths": {
+      "actioncable-rewired/*": ["actioncable-rewired/lib/*"],
+      "sandbox/*": ["sandbox/src/*"]
+    }
+  }
+}

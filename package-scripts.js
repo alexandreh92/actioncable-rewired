@@ -33,9 +33,17 @@ module.exports = {
       default: {
         script: series(
           'lerna link',
-          'lerna exec "yarn build" --ignore=sandbox --stream --no-bail',
+          'lerna exec "yarn tsc && yarn vite build" --ignore=sandbox --stream --no-bail',
         ),
         description: 'Builds all packages for production',
+      },
+
+      watch: {
+        script: series(
+          'lerna link',
+          'lerna exec "yarn tsc && yarn vite build -w" --ignore=sandbox --stream --no-bail',
+        ),
+        description: 'Builds all package in watch mode',
       },
     },
 
@@ -44,18 +52,21 @@ module.exports = {
         script: series(
           'lerna link',
           // 'yarn start clean',
-          'lerna exec "yarn dev" --scope=sandbox --stream --no-bail',
           concurrent({
             packages: 'yarn start dev.packages',
+            sandbox: 'yarn start dev.sandbox',
           }),
         ),
         description: 'Builds all packages in "watch mode" and starts the docs',
       },
 
+      sandbox: {
+        script: 'lerna exec "yarn dev" --scope=sandbox --parallel --no-bail',
+      },
+
       packages: {
         script:
-          'lerna exec "yarn build" --scope=actioncable-rewired --parallel --no-bail',
-        hiddenFromHelp: true,
+          'lerna exec "nps build.watch" --ignore=sandbox --parallel --no-bail',
       },
     },
 
