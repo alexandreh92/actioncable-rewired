@@ -1,3 +1,5 @@
+import { IMessageEvent } from 'websocket';
+
 const internalVars = {
   message_types: {
     welcome: 'welcome',
@@ -26,5 +28,17 @@ export type DisconnectReasonType = keyof typeof internalVars.disconnect_reasons;
 export type Protocols = typeof internalVars.protocols[number];
 export type Commands =
   typeof internalVars.commands[keyof typeof internalVars.commands];
+
+export interface EventData extends IMessageEvent {
+  identifier: string;
+  message: string;
+  reason: string;
+  reconnect: boolean;
+  type: MessageTypes;
+}
+
+export type MessageEvent = {
+  data: string;
+};
 
 export default internalVars;

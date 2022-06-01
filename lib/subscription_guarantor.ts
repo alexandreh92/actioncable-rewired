@@ -57,6 +57,7 @@ class SubscriptionGuarantor {
             `SubscriptionGuarantor resubscribing ${subscription.identifier}`,
           );
           this.subscriptions.subscribe(subscription);
+          return undefined;
         });
       }
     }, 500);

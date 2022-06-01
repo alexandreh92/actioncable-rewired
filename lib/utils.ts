@@ -14,3 +14,12 @@ export const createWebSocketURL: CreateWebSocketURL = (url) => {
   }
   return newUrl;
 };
+
+export const availableEvents = [
+  'onopen',
+  'onmessage',
+  'onclose',
+  'onerror',
+] as const;
+
+export type Events = typeof availableEvents[number];

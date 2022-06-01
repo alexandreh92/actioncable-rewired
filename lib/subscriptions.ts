@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import Subscription from './subscription';
 import SubscriptionGuarantor from './subscription_guarantor';
 import logger from './logger';
@@ -86,8 +87,12 @@ export default class Subscriptions {
     );
   }
 
-  notify(subscription: Subscription, callbackName: string, ...args: any[]) {
-    let subscriptions;
+  notify(
+    subscription: Subscription | string,
+    callbackName: string,
+    ...args: any[]
+  ) {
+    let subscriptions: Subscription[];
     if (typeof subscription === 'string') {
       subscriptions = this.findAll(subscription);
     } else {
@@ -95,7 +100,9 @@ export default class Subscriptions {
     }
 
     return subscriptions.map((sub) => {
+      // @ts-ignore
       if (typeof sub[callbackName] === 'function') {
+        // @ts-ignore
         return sub[callbackName](...args);
       }
       return undefined;

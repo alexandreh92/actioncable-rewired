@@ -22,7 +22,7 @@ export default class Consumer {
     return this.connection.send(data);
   }
 
-  connect(): void {
+  connect(): boolean {
     return this.connection.open();
   }
 
