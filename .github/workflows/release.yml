@@ -13,8 +13,6 @@ jobs:
     if: github.event.pull_request.merged == true
 
     steps:
-
-
       - name: Set major release
         if: ${{ contains(github.event.pull_request.labels.*.name, 'release-major') }}
         run: echo "RELEASE=major" >> $GITHUB_ENV
