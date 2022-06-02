@@ -43,4 +43,4 @@ jobs:
         run: yarn install
 
       - name: Bump new version
-        run: yarn start version.${{ env.RELEASE }}
+        run: HUSKY=0 yarn start version.${{ env.RELEASE }}
