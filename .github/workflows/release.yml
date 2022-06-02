@@ -2,7 +2,7 @@ name: Release
 
 on:
   pull_request:
-    # types: [closed]
+    types: [closed]
     branches:
       - main
 
@@ -10,7 +10,7 @@ jobs:
   create-version:
     name: Bump new version
     runs-on: ubuntu-latest
-    # if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
 
     steps:
       - name: Set major release
@@ -36,4 +36,4 @@ jobs:
         run: yarn install
 
       - name: Bump new version
-        run: yarn start ${{ env.RELEASE }}
+        run: yarn start version.${{ env.RELEASE }}
