@@ -13,12 +13,19 @@ jobs:
     if: github.event.pull_request.merged == true
 
     steps:
+      - name: Setup git
+        run: |
+          git config user.email "pusher-ci@pusher.com"
+          git config user.name "Pusher CI"
+
       - name: Set major release
         if: ${{ contains(github.event.pull_request.labels.*.name, 'release-major') }}
         run: echo "RELEASE=major" >> $GITHUB_ENV
+
       - name: Set minor release
         if: ${{ contains(github.event.pull_request.labels.*.name, 'release-minor') }}
         run: echo "RELEASE=minor" >> $GITHUB_ENV
+
       - name: Set patch release
         if: ${{ contains(github.event.pull_request.labels.*.name, 'release-patch') }}
         run: echo "RELEASE=patch" >> $GITHUB_ENV

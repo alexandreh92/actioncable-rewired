@@ -72,24 +72,20 @@ module.exports = {
 
     version: {
       default: {
-        script:
-          'yarn lerna version --sign-git-tag --sign-git-commit --no-private --yes',
+        script: 'yarn lerna version --no-private --yes',
         description: 'Bumps new version',
       },
 
       major: {
-        script:
-          'yarn lerna version major --sign-git-tag --sign-git-commit --no-private --yes',
+        script: 'yarn lerna version major --no-private --yes',
       },
 
       minor: {
-        script:
-          'yarn lerna version minor --sign-git-tag --sign-git-commit --no-private --yes',
+        script: 'yarn lerna version minor --no-private --yes',
       },
 
       patch: {
-        script:
-          'yarn lerna version patch --sign-git-tag --sign-git-commit --no-private --yes',
+        script: 'yarn lerna version patch --no-private --yes',
       },
     },
   },
