@@ -6,7 +6,7 @@ jobs:
   default:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v2
 
       - name: Install Packages
@@ -19,9 +19,9 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
           npm whoami
         env:
-          NPM_TOKEN: ${{ secrets.NPMTOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # - name: Publish
       #   run: lerna publish from-package --yes
       #   env:
-      #     NPM_TOKEN: ${{ secrets.NPMTOKEN }}
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
