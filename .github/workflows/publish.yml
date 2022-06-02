@@ -5,7 +5,7 @@ on:
     types: [published]
 
 jobs:
-  default:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
