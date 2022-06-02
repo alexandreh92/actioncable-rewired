@@ -9,8 +9,7 @@ jobs:
 
     steps:
       - name: Checkout
-        run: |
-          echo Run build
+        run: echo Run build
 
   test:
     name: Run Tests
@@ -18,8 +17,7 @@ jobs:
 
     steps:
       - name: Checkout
-        run: |
-          echo Run Tests
+        run: echo Run Tests
 
   lint:
     name: Run Linters
@@ -27,7 +25,6 @@ jobs:
 
     steps:
       - name: Checkout
-        run: |
-          echo Run Linters
+        run: echo Run Linters
 
 
