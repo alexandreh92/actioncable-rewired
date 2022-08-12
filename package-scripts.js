@@ -64,89 +64,23 @@ module.exports = {
       },
     },
 
-    //   docs: {
-    //     script:
-    //       'lerna exec "yarn start dev" --scope=@decisiv/dds-docs --stream --no-bail',
-    //     hiddenFromHelp: true,
-    //   },
-    //   packages: {
-    //     script:
-    //       'lerna exec "yarn start dev" --ignore=@decisiv/dds-docs --parallel --no-bail',
-    //     hiddenFromHelp: true,
-    //   },
-    //   sandbox: {
-    //     script: 'lerna run start:sandbox --scope=@decisiv/sandbox',
-    //   },
-    // },
+    version: {
+      default: {
+        script: 'yarn lerna version --no-private --yes',
+        description: 'Bumps new version',
+      },
 
-    // test: {
-    //   default: {
-    //     script: 'jest',
-    //     description: 'Runs tests of all packages',
-    //   },
-    //   updateSnapshots: {
-    //     script: 'jest -u',
-    //     description: 'Updates all snapshots from jest',
-    //   },
-    //   openReport: {
-    //     script: 'open-cli coverage/index.html',
-    //     description: 'Opens the generated test coverage report',
-    //   },
-    // },
+      major: {
+        script: 'yarn lerna version major --no-private --yes',
+      },
 
-    // lint: 'lerna exec "yarn start lint" --parallel --no-bail',
+      minor: {
+        script: 'yarn lerna version minor --no-private --yes',
+      },
 
-    // ci: {
-    //   default: {
-    //     script: series(
-    //       'yarn start clean',
-    //       concurrent({
-    //         lint: 'yarn start ci.lint',
-    //         test: series('yarn start ci.build', 'yarn start ci.test'),
-    //       }),
-    //     ),
-    //     description:
-    //       'Cleans, builds and tests all packages, and finally uploads the test coverage report',
-    //   },
-    //   lint: oneLine`
-    //     lerna exec
-    //       'yarn start "lint
-    //           --format junit
-    //           -o $LERNA_ROOT_PATH/reports/lint-\${LERNA_PACKAGE_NAME#"@decisiv/"}/js-lint-results.xml"'
-    //       --stream --no-bail --concurrency 1
-    //   `,
-    //   build: oneLine`
-    //     lerna exec "yarn start build"
-    //       --stream --no-bail
-    //       --ignore @decisiv/dds-docs
-    //       --ignore @decisiv/sandbox
-    //   `,
-    //   test: series(
-    //     oneLine`
-    //       lerna exec
-    //         'JEST_JUNIT_OUTPUT_DIR="$LERNA_ROOT_PATH/reports/test-\${LERNA_PACKAGE_NAME#"@decisiv/"}/"
-    //           yarn start "test
-    //             --no-cache --maxWorkers=2
-    //             --ci --coverage --reporters=jest-junit"'
-    //         --stream --no-bail --concurrency 1
-    //     `,
-    //     'codecov',
-    //   ),
-    // },
-
-    // deploy: {
-    //   default: {
-    //     script: series(
-    //       'yarn start clean',
-    //       'lerna exec "yarn start build" --stream --no-bail --ignore @decisiv/dds-docs',
-    //       'yarn start deploy.modules',
-    //     ),
-    //     description: 'Build the NPM modules and deploy them to Gemfury',
-    //   },
-    //   modules: {
-    //     script: 'SKIP_COMMITLINT=true npx lerna publish --yes',
-    //     description: 'Deploy the NPM modules to Gemfury',
-    //   },
-    // },
+      patch: {
+        script: 'yarn lerna version patch --no-private --yes',
+      },
+    },
   },
 };

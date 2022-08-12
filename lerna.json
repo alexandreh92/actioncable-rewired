@@ -4,11 +4,14 @@
   "useWorkspaces": true,
   "version": "independent",
   "command": {
+    "publish": {
+      "registry": "https://registry.npmjs.org"
+    },
     "version": {
       "createRelease": "github",
       "conventionalCommits": true,
-      "allowBranch": ["main"],
-      "message": "chore(release): bump %s",
+      "allowBranch": ["main", "release/*"],
+      "message": "chore(release): publish",
       "noPrivate": true
     }
   }

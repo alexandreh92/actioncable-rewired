@@ -1,0 +1,30 @@
+name: CI
+
+on: [pull_request]
+
+jobs:
+  build:
+    name: Run build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        run: echo Run build
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        run: echo Run Tests
+
+  lint:
+    name: Run Linters
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        run: echo Run Linters
+
+

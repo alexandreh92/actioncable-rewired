@@ -38,7 +38,7 @@
     "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\""
   },
   "dependencies": {
-    "actioncable-rewired": "^0.0.3"
+    "actioncable-rewired": "*"
   },
   "devDependencies": {
     "@types/node": "^17.0.36",

@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  create-version:
+    name: Bump new version
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+
+    steps:
+      - name: Set major release
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'release-major') }}
+        run: echo "RELEASE=major" >> $GITHUB_ENV
+
+      - name: Set minor release
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'release-minor') }}
+        run: echo "RELEASE=minor" >> $GITHUB_ENV
+
+      - name: Set patch release
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'release-patch') }}
+        run: echo "RELEASE=patch" >> $GITHUB_ENV
+
+      - name: Preconfigure lerna
+        run: |
+          echo "GH_TOKEN=${{ secrets.GH_TOKEN }}" >> $GITHUB_ENV
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Setup git
+        run: |
+          git config user.email "27856297+dependabot-preview[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Bump new version
+        run: HUSKY=0 yarn start version.${{ env.RELEASE }}
