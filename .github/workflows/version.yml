@@ -34,6 +34,9 @@ jobs:
       - name: Bump new pre-release version
         run: |
           HUSKY=0 yarn start version.prerelease
+          yarn install
+          git add .
+          git commit --amend --no-edit;
           git push
 
       - name: Authenticate
