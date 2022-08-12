@@ -3,10 +3,11 @@ import Subscription from './subscription';
 import SubscriptionGuarantor from './subscription_guarantor';
 import logger from './logger';
 import Consumer from './consumer';
-import INTERNAL from './internal';
+import INTERNAL_VARS from './internal';
 import type { Commands } from './internal';
+import { ChannelNameWithParams, Mixin, NotificationCallback } from './@types';
 
-const { commands } = INTERNAL;
+const { commands, NOTIFICATION_CALLBACKS } = INTERNAL_VARS;
 
 // Collection class for creating (and internally managing) channel subscriptions.
 // The only method intended to be triggered by the user is ActionCable.Subscriptions#create,
@@ -29,10 +30,10 @@ export default class Subscriptions {
     this.subscriptions = [];
   }
 
-  create(
-    channelName: string | Record<string, unknown>,
-    mixin: any,
-  ): Subscription {
+  create<P>(
+    channelName: string | ChannelNameWithParams,
+    mixin: Mixin<P>,
+  ): Subscription<P> {
     const channel = channelName;
     const params = typeof channel === 'object' ? channel : { channel };
     const subscription = new Subscription(this.consumer, params, mixin);
@@ -44,7 +45,7 @@ export default class Subscriptions {
   add(subscription: Subscription): Subscription {
     this.subscriptions.push(subscription);
     this.consumer.ensureActiveConnection();
-    this.notify(subscription, 'initialized');
+    this.notify(subscription, NOTIFICATION_CALLBACKS.INITIALIZED);
     this.subscribe(subscription);
     return subscription;
   }
@@ -60,7 +61,7 @@ export default class Subscriptions {
   reject(identifier: string): Subscription[] {
     return this.findAll(identifier).map((subscription) => {
       this.forget(subscription);
-      this.notify(subscription, 'rejected');
+      this.notify(subscription, NOTIFICATION_CALLBACKS.REJECTED);
       return subscription;
     });
   }
@@ -81,7 +82,7 @@ export default class Subscriptions {
     );
   }
 
-  notifyAll(callbackName: string, ...args: any[]) {
+  notifyAll(callbackName: NotificationCallback, ...args: any[]) {
     return this.subscriptions.map((subscription) =>
       this.notify(subscription, callbackName, ...args),
     );
@@ -89,7 +90,7 @@ export default class Subscriptions {
 
   notify(
     subscription: Subscription | string,
-    callbackName: string,
+    callbackName: NotificationCallback,
     ...args: any[]
   ) {
     let subscriptions: Subscription[];

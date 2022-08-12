@@ -15,19 +15,12 @@ module.exports = {
       description: 'Builds all packages for production and starts the docs',
     },
 
-    // clean: {
-    //   default: {
-    //     script: series(
-    //       'lerna exec "yarn start clean" --parallel --no-bail',
-    //       'yarn start clean.self',
-    //     ),
-    //     description: 'Clean artifacts from all packages',
-    //   },
-    //   self: {
-    //     script: rimraf('coverage lib reports'),
-    //     hiddenFromHelp: true,
-    //   },
-    // },
+    clean: {
+      default: {
+        script: series('lerna exec "yarn start clean" --parallel --no-bail'),
+        description: 'Clean artifacts from all packages',
+      },
+    },
 
     build: {
       default: {
@@ -50,8 +43,8 @@ module.exports = {
     dev: {
       default: {
         script: series(
+          'lerna clean',
           'lerna link',
-          // 'yarn start clean',
           concurrent({
             packages: 'yarn start dev.packages',
             sandbox: 'yarn start dev.sandbox',
@@ -65,8 +58,9 @@ module.exports = {
       },
 
       packages: {
-        script:
+        script: series(
           'lerna exec "nps build.watch" --ignore=sandbox --parallel --no-bail',
+        ),
       },
     },
 

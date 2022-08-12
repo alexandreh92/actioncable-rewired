@@ -3,7 +3,12 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['airbnb', 'prettier', 'plugin:@typescript-eslint/recommended'],
+  extends: [
+    'plugin:react/recommended',
+    'prettier',
+    'airbnb',
+    'plugin:@typescript-eslint/recommended',
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
@@ -12,10 +17,16 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint', 'prettier'],
+  plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
     // Allow unused vars starting with _
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+
+    // Prevent allow JSX inside js,jsx and tsx files
+    'react/jsx-filename-extension': [
+      'warn',
+      { extensions: ['.js', '.jsx', '.tsx'] },
+    ],
 
     // Return errors for unresolved imports
     'import/no-unresolved': 'error',
@@ -41,21 +52,9 @@ module.exports = {
       },
     ],
 
-    indent: 'off',
-    '@typescript-eslint/indent': ['error', 2],
-
-    'lines-between-class-members': [
-      'error',
-      'always',
-      { exceptAfterSingleLine: true },
-    ],
-
-    'no-underscore-dangle': 'off',
     // Disabled useless fragments (disabled because this is returning a false positive)
     // see https://github.com/jsx-eslint/eslint-plugin-react/issues/2584
     'react/jsx-no-useless-fragment': 'off',
-
-    '@typescript-eslint/no-explicit-any': 'off',
   },
   settings: {
     'import/resolver': {

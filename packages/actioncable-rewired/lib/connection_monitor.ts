@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-restricted-globals */
+import Connection from './connection';
 import logger from './logger';
 
 // Responsible for ensuring the cable connection is in good health by validating the heartbeat pings sent from the server, and attempting

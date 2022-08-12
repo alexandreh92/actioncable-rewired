@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "target": "es5",
     "strict": true,
     "module": "commonjs",
@@ -9,8 +10,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": true,
-
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "moduleResolution": "Node",
     "resolveJsonModule": true,
