@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.5-alpha.0](https://github.com/alexandreh92/react-actioncable/compare/react-actioncable@0.0.3...react-actioncable@0.0.5-alpha.0) (2022-08-12)
+
+
+### Bug Fixes
+
+* **packages:** fix actioncable dependency ([618379f](https://github.com/alexandreh92/react-actioncable/commit/618379f68e6c1d2f18014d8aa4b0098daf828b64))
+
+
+
+
+
 ## 0.0.3 (2022-08-12)
 
 **Note:** Version bump only for package react-actioncable
