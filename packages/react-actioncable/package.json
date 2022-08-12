@@ -1,25 +1,26 @@
 {
-  "name": "actioncable-rewired",
+  "name": "react-actioncable",
   "private": false,
-  "version": "0.1.1",
+  "version": "0.0.2",
   "license": "MIT",
   "files": [
     "dist"
   ],
-  "main": "./dist/actioncable-rewired.umd.js",
-  "module": "./dist/actioncable-rewired.es.js",
+  "main": "./dist/react-actioncable.umd.js",
+  "module": "./dist/react-actioncable.es.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/actioncable-rewired.es.js",
-      "require": "./dist/actioncable-rewired.umd.js"
+      "import": "./dist/react-actioncable.es.js",
+      "require": "./dist/react-actioncable.umd.js"
     }
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alexandreh92/actioncable-rewired.git"
+    "url": "git+https://github.com/alexandreh92/react-actioncable.git"
   },
   "keywords": [
+    "react",
     "actioncable",
     "websockets",
     "rails",
@@ -27,26 +28,25 @@
     "rails actioncable"
   ],
   "bugs": {
-    "url": "https://github.com/alexandreh92/actioncable-rewired/issues"
+    "url": "https://github.com/alexandreh92/react-actioncable/issues"
   },
-  "homepage": "https://github.com/alexandreh92/actioncable-rewired#readme",
+  "homepage": "https://github.com/alexandreh92/react-actioncable#readme",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --build && vite build",
+    "build": "tsc && vite build",
     "preview": "vite preview",
     "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\""
   },
   "dependencies": {
-    "nps": "^5.10.0",
-    "nps-utils": "^1.7.0",
-    "typescript": "^4.7.2",
-    "websocket": "^1.0.34"
+    "actioncable-rewired": "*"
   },
   "devDependencies": {
     "@types/node": "^17.0.36",
-    "@types/websocket": "^1.0.5",
+    "@types/react": "^16.3.0",
+    "@types/react-dom": "^16.3.0",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
+    "@vitejs/plugin-react": "^1.3.0",
     "eslint": "^8.16.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",
@@ -59,12 +59,15 @@
     "eslint-plugin-react-hooks": "^4.5.0",
     "json": "^11.0.0",
     "prettier": "^2.6.2",
-    "typescript": "^4.7.2",
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0",
+    "typescript": "^4.6.3",
     "vite": "^2.9.9",
     "vite-plugin-dts": "^1.2.0",
     "vite-plugin-eslint": "^1.6.1"
   },
   "peerDependencies": {
-    "websocket": "^1.0.34"
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
   }
 }

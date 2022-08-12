@@ -62,6 +62,7 @@
 // The "AppearanceChannel" name is automatically mapped between the client-side subscription creation and the server-side Ruby class name.
 // The AppearanceChannel#appear/away public methods are exposed automatically to client-side invocation through the perform method.
 
+import { Mixin } from './@types';
 import Consumer from './consumer';
 
 // @ts-ignore
@@ -75,7 +76,7 @@ const extend = (object, properties) => {
   return object;
 };
 
-export default class Subscription {
+export default class Subscription<T = any> {
   consumer: Consumer;
   identifier: string;
 
@@ -83,7 +84,7 @@ export default class Subscription {
     consumer: Consumer,
     // eslint-disable-next-line default-param-last
     params: Record<string, unknown> = {},
-    mixin: Record<string, unknown>,
+    mixin: Mixin<T>,
   ) {
     this.consumer = consumer;
     this.identifier = JSON.stringify(params);
@@ -105,7 +106,7 @@ export default class Subscription {
     });
   }
 
-  unsubscribe(): Subscription {
+  unsubscribe(): Subscription<T> {
     return this.consumer.subscriptions.remove(this);
   }
 }

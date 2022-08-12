@@ -3,14 +3,15 @@ import { w3cwebsocket as WebSocket } from 'websocket';
 
 import ConnectionMonitor from './connection_monitor';
 
+import Consumer from './consumer';
+import Subscriptions from './subscriptions';
 import logger from './logger';
-import INTERNAL, { EventData } from './internal';
-import type { MessageEvent } from './internal';
+import INTERNAL_VARS, { EventData, MessageEvent } from './internal';
 import { availableEvents } from './utils';
 
-const { message_types, protocols } = INTERNAL;
+const { message_types, protocols, NOTIFICATION_CALLBACKS } = INTERNAL_VARS;
 const supportedProtocols = protocols.slice(0, protocols.length - 1);
-const defaultProtocol = INTERNAL.protocols[0];
+const defaultProtocol = INTERNAL_VARS.protocols[0];
 
 export const CONNECTION_STATE = {
   CONNECTING: 0,
@@ -156,19 +157,27 @@ export default class Connection {
       case message_types.disconnect:
         logger.log(`Disconnecting. Reason: ${reason}`);
         this.close({ allowReconnect: reconnect });
+        this.subscriptions.notify(
+          identifier,
+          NOTIFICATION_CALLBACKS.DISCONNECTED,
+        );
         break;
       case message_types.ping:
         this.monitor.recordPing();
         break;
       case message_types.confirmation:
         this.subscriptions.confirmSubscription(identifier);
-        this.subscriptions.notify(identifier, 'connected');
+        this.subscriptions.notify(identifier, NOTIFICATION_CALLBACKS.CONNECTED);
         break;
       case message_types.rejection:
         this.subscriptions.reject(identifier);
         break;
       default:
-        this.subscriptions.notify(identifier, 'received', message);
+        this.subscriptions.notify(
+          identifier,
+          NOTIFICATION_CALLBACKS.RECEIVED,
+          message,
+        );
         break;
     }
   }
