@@ -8,44 +8,39 @@ jobs:
   default:
     runs-on: ubuntu-latest
     steps:
-      # - name: Checkout
-      #   uses: actions/checkout@v2
-      #   with:
-      #     ref: ${{ github.event.base_ref }}
+      - name: Set root branch
+        run: echo RELEASE_BRANCH=$(echo ${{ github.event.release.name }} | sed -e 's/^\(.\{4\}\).*$/\1/') >> $GITHUB_ENV
+
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.RELEASE_BRANCH }}
 
       - name: Install Packages
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-          BRANCH_ROOT_VERSION: sed -e 's/^\(.\{3\}\).*$/\1/' <<< ${{ github.event.name }}
+        run: yarn install
+
+      - name: Build
+        run: yarn start build
+
+      - name: Bump new release version
         run: |
-          echo "$GITHUB_CONTEXT"
-          echo "release/$BRANCH_ROOT_VERSION"
-          echo "$BRANCH_ROOT_VERSION"
+          HUSKY=0 yarn start version.graduate
+          yarn install
+          git add .
+          HUSKY=0 git commit --amend --no-edit
+          git push origin ${{ env.RELEASE_BRANCH }} --tags
 
-      # - name: Install Packages
-      #   run: yarn install
+      - name: Authenticate
+        run: |
+          echo "@grandcore:registry=http://registry.npmjs.org/" > .npmrc
+          echo "registry=http://registry.npmjs.org/" >> .npmrc
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+          npm whoami
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # - name: Build
-      #   run: yarn start build
-
-      # - name: Bump new release version
-      #   run: |
-      #     HUSKY=0 yarn start version.graduate
-      #     yarn install
-      #     git add .
-      #     HUSKY=0 git commit --amend --no-edit
-      #     git push origin ${{ github.event.base_ref }} --tags
-
-      # - name: Authenticate
-      #   run: |
-      #     echo "@grandcore:registry=http://registry.npmjs.org/" > .npmrc
-      #     echo "registry=http://registry.npmjs.org/" >> .npmrc
-      #     echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
-      #     npm whoami
-      #   env:
-      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      # - name: Publish
-      #   run: lerna publish from-package --no-verify-access --yes
-      #   env:
-      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish
+        run: lerna publish from-package --no-verify-access --yes
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
