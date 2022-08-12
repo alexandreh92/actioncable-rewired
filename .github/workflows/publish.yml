@@ -16,7 +16,7 @@ jobs:
       - name: Install Packages
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
-          BRANCH_ROOT_VERSION: ${{ sed -e 's/^\(.\{3\}\).*$/\1/' <<< github.event.name }}
+          BRANCH_ROOT_VERSION: sed -e 's/^\(.\{3\}\).*$/\1/' <<< ${{ github.event.name }}
         run: |
           echo "$GITHUB_CONTEXT"
           echo "release/$BRANCH_ROOT_VERSION"
