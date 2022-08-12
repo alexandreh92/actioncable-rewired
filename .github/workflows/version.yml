@@ -36,7 +36,7 @@ jobs:
           HUSKY=0 yarn start version.prerelease
           yarn install
           git add .
-          HUSKY=0 git commit --amend --no-edit;
+          HUSKY=0 git commit --amend --no-edit
           git push
 
       - name: Authenticate
