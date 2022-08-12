@@ -9,7 +9,7 @@ logger.enabled = true;
 function App() {
   const subscriptionRef = useRef<Subscription>();
 
-  const [url, setUrl] = useState('ws://localhost:3001/websocket');
+  const [url, setUrl] = useState('ws://localhost:3000/api/websockets');
   const [channel, setChannel] = useState('ChatChannel');
   const [params, setParams] = useState('');
   const [subscriptionMessages, setSubscriptionMessages] = useState<string[]>(

@@ -156,11 +156,11 @@ export default class Connection {
         break;
       case message_types.disconnect:
         logger.log(`Disconnecting. Reason: ${reason}`);
-        this.close({ allowReconnect: reconnect });
         this.subscriptions.notify(
           identifier,
           NOTIFICATION_CALLBACKS.DISCONNECTED,
         );
+        this.close({ allowReconnect: reconnect });
         break;
       case message_types.ping:
         this.monitor.recordPing();
