@@ -14,29 +14,32 @@ jobs:
           ref: ${{ github.event.base_ref }}
 
       - name: Install Packages
-        run: yarn install
+        run: echo ${{ github.base_ref }}
 
-      - name: Build
-        run: yarn start build
+      # - name: Install Packages
+      #   run: yarn install
 
-      - name: Bump new release version
-        run: |
-          HUSKY=0 yarn start version.graduate
-          yarn install
-          git add .
-          HUSKY=0 git commit --amend --no-edit
-          git push origin ${{ github.event.base_ref }} --tags
+      # - name: Build
+      #   run: yarn start build
 
-      - name: Authenticate
-        run: |
-          echo "@grandcore:registry=http://registry.npmjs.org/" > .npmrc
-          echo "registry=http://registry.npmjs.org/" >> .npmrc
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
-          npm whoami
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # - name: Bump new release version
+      #   run: |
+      #     HUSKY=0 yarn start version.graduate
+      #     yarn install
+      #     git add .
+      #     HUSKY=0 git commit --amend --no-edit
+      #     git push origin ${{ github.event.base_ref }} --tags
 
-      - name: Publish
-        run: lerna publish from-package --no-verify-access --yes
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # - name: Authenticate
+      #   run: |
+      #     echo "@grandcore:registry=http://registry.npmjs.org/" > .npmrc
+      #     echo "registry=http://registry.npmjs.org/" >> .npmrc
+      #     echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+      #     npm whoami
+      #   env:
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # - name: Publish
+      #   run: lerna publish from-package --no-verify-access --yes
+      #   env:
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
