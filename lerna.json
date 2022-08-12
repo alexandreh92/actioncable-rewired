@@ -1,15 +1,20 @@
 {
-  "packages": ["packages/*"],
+  "packages": [
+    "packages/*"
+  ],
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "0.1.7",
+  "version": "0.1.8-alpha.0",
   "command": {
     "publish": {
       "registry": "https://registry.npmjs.org"
     },
     "version": {
       "conventionalCommits": true,
-      "allowBranch": ["main", "release/*"],
+      "allowBranch": [
+        "main",
+        "release/*"
+      ],
       "message": "chore(release): publish",
       "noPrivate": true
     }
