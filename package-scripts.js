@@ -87,12 +87,12 @@ module.exports = {
 
       prerelease: {
         script:
-          'yarn lerna version prerelease --no-private --yes --conventional-commits',
+          'yarn lerna version prerelease --no-private --yes --conventional-commits --no-push',
       },
 
       graduate: {
         script:
-          'yarn lerna version --no-private --yes --conventional-commits --conventional-graduate',
+          'yarn lerna version --no-private --yes --conventional-commits --conventional-graduate --no-push',
       },
     },
   },

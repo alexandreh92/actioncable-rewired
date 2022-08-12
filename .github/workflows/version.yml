@@ -34,7 +34,10 @@ jobs:
       - name: Bump new pre-release version
         run: |
           HUSKY=0 yarn start version.prerelease
-          git push
+          yarn install
+          git add .
+          HUSKY=0 git commit --amend --no-edit
+          git push origin ${{ github.ref }}
 
       - name: Authenticate
         run: |
