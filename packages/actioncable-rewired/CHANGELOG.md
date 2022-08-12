@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.1.3-alpha.1 (2022-08-12)
+
+**Note:** Version bump only for package actioncable-rewired
+
+
+
+
+
 ## [0.1.3-alpha.0](https://github.com/alexandreh92/actioncable-rewired/compare/actioncable-rewired@0.1.2...actioncable-rewired@0.1.3-alpha.0) (2022-08-12)
 
 
