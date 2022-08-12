@@ -11,7 +11,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.event.base_ref }}
 
       - name: Install Packages
         run: yarn install
@@ -19,13 +19,13 @@ jobs:
       - name: Build
         run: yarn start build
 
-      - name: Bump new pre-release version
+      - name: Bump new release version
         run: |
           HUSKY=0 yarn start version.graduate
           yarn install
           git add .
           HUSKY=0 git commit --amend --no-edit
-          git push origin ${{ github.ref }} --tags
+          git push origin ${{ github.event.base_ref }} --tags
 
       - name: Authenticate
         run: |
