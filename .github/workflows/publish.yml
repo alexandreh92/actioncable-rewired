@@ -1,4 +1,4 @@
-name: Publish
+name: Publish Release
 
 on:
   release:
@@ -10,9 +10,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
 
       - name: Install Packages
         run: yarn install
+
+      - name: Build
+        run: yarn start build
+
+      - name: Bump new pre-release version
+        run: |
+          HUSKY=0 yarn start version.graduate
+          git push
 
       - name: Authenticate
         run: |

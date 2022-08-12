@@ -71,19 +71,28 @@ module.exports = {
       },
 
       major: {
-        script: 'yarn lerna version major --no-private --yes',
+        script:
+          'yarn lerna version major --no-private --yes --no-git-tag-version --no-push',
       },
 
       minor: {
-        script: 'yarn lerna version minor --no-private --yes',
+        script:
+          'yarn lerna version minor --no-private --yes --no-git-tag-version --no-push',
       },
 
       patch: {
-        script: 'yarn lerna version patch --no-private --yes',
+        script:
+          'yarn lerna version patch --no-private --yes --no-git-tag-version --no-push',
       },
 
       prerelease: {
-        script: 'yarn lerna version prerelease --no-private --yes',
+        script:
+          'yarn lerna version prerelease --no-private --yes --conventional-commits',
+      },
+
+      graduate: {
+        script:
+          'yarn lerna version --no-private --yes --conventional-commits --conventional-graduate',
       },
     },
   },
