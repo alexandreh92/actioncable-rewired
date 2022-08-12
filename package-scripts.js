@@ -81,6 +81,10 @@ module.exports = {
       patch: {
         script: 'yarn lerna version patch --no-private --yes',
       },
+
+      prerelease: {
+        script: 'yarn lerna version prerelease --no-private --yes',
+      },
     },
   },
 };

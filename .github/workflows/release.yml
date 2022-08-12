@@ -1,30 +1,16 @@
 name: Release
 
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
-      - main
+      - release/**
 
 jobs:
   create-version:
     name: Bump new version
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
 
     steps:
-      - name: Set major release
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'release-major') }}
-        run: echo "RELEASE=major" >> $GITHUB_ENV
-
-      - name: Set minor release
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'release-minor') }}
-        run: echo "RELEASE=minor" >> $GITHUB_ENV
-
-      - name: Set patch release
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'release-patch') }}
-        run: echo "RELEASE=patch" >> $GITHUB_ENV
-
       - name: Preconfigure lerna
         run: |
           echo "GH_TOKEN=${{ secrets.GH_TOKEN }}" >> $GITHUB_ENV
@@ -36,11 +22,25 @@ jobs:
 
       - name: Setup git
         run: |
-          git config user.email "27856297+dependabot-preview[bot]@users.noreply.github.com"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
 
       - name: Install dependencies
         run: yarn install
 
-      - name: Bump new version
-        run: HUSKY=0 yarn start version.${{ env.RELEASE }}
+      - name: Bump new pre-release version
+        run: HUSKY=0 yarn start version.prerelease
+
+      - name: Authenticate
+        run: |
+          echo "@grandcore:registry=http://registry.npmjs.org/" > .npmrc
+          echo "registry=http://registry.npmjs.org/" >> .npmrc
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+          npm whoami
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish
+        run: lerna publish from-package --no-verify-access --yes
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
