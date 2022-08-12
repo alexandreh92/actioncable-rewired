@@ -1,4 +1,4 @@
-name: Release
+name: Version
 
 on:
   push:
@@ -29,7 +29,9 @@ jobs:
         run: yarn install
 
       - name: Bump new pre-release version
-        run: HUSKY=0 yarn start version.prerelease
+        run: |
+          HUSKY=0 yarn start version.prerelease
+          git push
 
       - name: Authenticate
         run: |
