@@ -4,6 +4,7 @@
     "baseUrl": "./packages",
     "paths": {
       "actioncable-rewired/*": ["actioncable-rewired/lib/*"],
+      "react-actioncable/*": ["react-actioncable/lib/*"],
       "sandbox/*": ["sandbox/src/*"]
     }
   }

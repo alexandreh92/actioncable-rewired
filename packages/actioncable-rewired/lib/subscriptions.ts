@@ -102,7 +102,7 @@ export default class Subscriptions {
 
     return subscriptions.map((sub) => {
       // @ts-ignore
-      if (typeof sub[callbackName] === 'function') {
+      if (sub && typeof sub[callbackName] === 'function') {
         // @ts-ignore
         return sub[callbackName](...args);
       }

@@ -156,6 +156,10 @@ export default class Connection {
         break;
       case message_types.disconnect:
         logger.log(`Disconnecting. Reason: ${reason}`);
+        this.subscriptions.notify(
+          identifier,
+          NOTIFICATION_CALLBACKS.DISCONNECTED,
+        );
         this.close({ allowReconnect: reconnect });
         this.subscriptions.notify(
           identifier,
