@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set root branch
-        run: echo RELEASE_BRANCH=$(echo ${{ github.event.release.name }} | sed -e 's/^\(.\{4\}\).*$/\1/') >> $GITHUB_ENV
+        run: echo RELEASE_BRANCH=release/$(echo ${{ github.event.release.name }} | sed -e 's/^\(.\{4\}\).*$/\1/') >> $GITHUB_ENV
 
 
       - name: Checkout
