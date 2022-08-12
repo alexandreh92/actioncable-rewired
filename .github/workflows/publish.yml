@@ -8,13 +8,14 @@ jobs:
   default:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.base_ref }}
+      # - name: Checkout
+      #   uses: actions/checkout@v2
+      #   with:
+      #     ref: ${{ github.event.base_ref }}
 
       - name: Install Packages
-        run: echo ${{ github.base_ref }}
+        run: |
+          echo ${{ github.event.target_commitish }}
 
       # - name: Install Packages
       #   run: yarn install
