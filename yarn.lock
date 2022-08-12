@@ -1855,6 +1855,11 @@ acorn@^8.4.1, acorn@^8.7.1:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.7.1.tgz#0197122c843d1bf6d0a5e83220a788f278f63c30"
   integrity sha512-Xx54uLJQZ19lKygFXOWsscKUbsBZW0CPykPhVQdhIeIwrbPmJzqeASDInc8nKBnp/JT6igTs82qPXz069H8I/A==
 
+actioncable-rewired@*:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/actioncable-rewired/-/actioncable-rewired-0.1.2.tgz#f8caf795544ba919bc52436b5268e1995701d2c5"
+  integrity sha512-wrxer4s0zJHYPN1DGy0MllE15HorbU4FRlkMgA0x5fDjxJN1QxEhvFNgHWSCDn/vowzIoyn7eTkunyLZVZXkIA==
+
 add-stream@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/add-stream/-/add-stream-1.0.0.tgz#6a7990437ca736d5e1288db92bd3266d5f5cb2aa"
