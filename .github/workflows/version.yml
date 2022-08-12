@@ -31,13 +31,13 @@ jobs:
       # - name: Build
       #   run: yarn start build
 
-      # - name: Bump new pre-release version
-      #   run: |
-      #     HUSKY=0 yarn start version.prerelease
-      #     yarn install
-      #     git add .
-      #     HUSKY=0 git commit --amend --no-edit
-      #     git push origin ${{ github.ref }} --tags
+      - name: Bump new pre-release version
+        run: |
+          HUSKY=0 yarn start version.prerelease
+          yarn install
+          git add .
+          HUSKY=0 git commit --amend --no-edit
+          git push origin ${{ github.ref }} --tags
 
       # - name: Authenticate
       #   run: |
