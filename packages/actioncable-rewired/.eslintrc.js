@@ -24,7 +24,7 @@ module.exports = {
     'prettier/prettier': 'error',
 
     // Allow using devDependencies on rootDir
-    'import/no-extraneous-dependencies': ['error', { packageDir: '.' }],
+    'import/no-extraneous-dependencies': 'off',
 
     // Disables default exportations
     'import/prefer-default-export': 'off',
@@ -54,6 +54,8 @@ module.exports = {
     // Disabled useless fragments (disabled because this is returning a false positive)
     // see https://github.com/jsx-eslint/eslint-plugin-react/issues/2584
     'react/jsx-no-useless-fragment': 'off',
+
+    '@typescript-eslint/no-explicit-any': 'off',
   },
   settings: {
     'import/resolver': {

@@ -5,10 +5,10 @@ import React, {
   forwardRef,
 } from 'react';
 
-import * as ActionCable from 'actioncable-rewired';
+import { Consumer, createConsumer } from 'actioncable-rewired';
 
 interface ActionCableContextProps {
-  consumer: ActionCable.Consumer;
+  consumer: Consumer;
 }
 
 export const ActionCableContext = createContext<ActionCableContextProps>(
@@ -21,14 +21,14 @@ interface ActionCableProviderProps {
 }
 
 interface ActionCableProviderHandles {
-  consumer: ActionCable.Consumer;
+  consumer: Consumer;
 }
 
 export const ActionCableProvider = forwardRef<
   ActionCableProviderHandles,
   ActionCableProviderProps
 >(({ children, url }, ref) => {
-  const consumer = useMemo(() => ActionCable.createConsumer(url), [url]);
+  const consumer = useMemo(() => createConsumer(url), [url]);
 
   const value = useMemo(
     () => ({

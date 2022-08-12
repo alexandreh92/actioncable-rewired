@@ -9,7 +9,7 @@ export default defineConfig({
     dts({
       insertTypesEntry: true,
     }),
-    eslintPlugin(),
+    eslintPlugin({ include: './lib/**/*.{js,jsx,ts,tsx}' }),
   ],
   build: {
     lib: {

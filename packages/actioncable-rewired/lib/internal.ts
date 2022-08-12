@@ -20,6 +20,13 @@ const internalVars = {
     SUBSCRIBE: 'subscribe',
     UNSUBSCRIBE: 'unsubscribe',
   } as const,
+  NOTIFICATION_CALLBACKS: {
+    CONNECTED: 'connected',
+    DISCONNECTED: 'disconnected',
+    RECEIVED: 'received',
+    INITIALIZED: 'initialized',
+    REJECTED: 'rejected',
+  } as const,
 };
 
 export type InternalVars = typeof internalVars;
