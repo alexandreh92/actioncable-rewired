@@ -1,7 +1,7 @@
 {
   "name": "react-actioncable",
   "private": false,
-  "version": "0.1.8-alpha.7",
+  "version": "0.1.8-alpha.8",
   "license": "MIT",
   "files": [
     "dist"
@@ -37,7 +37,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "actioncable-rewired": "^0.1.8-alpha.7"
+    "actioncable-rewired": "^0.1.8-alpha.8"
   },
   "devDependencies": {
     "@types/node": "^17.0.36",
