@@ -15,7 +15,7 @@ jobs:
 
       - name: Install Packages
         run: |
-          echo ${{ github.event.target_commitish }}
+          echo "$GITHUB_CONTEXT"
 
       # - name: Install Packages
       #   run: yarn install
