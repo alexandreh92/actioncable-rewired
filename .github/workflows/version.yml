@@ -37,7 +37,7 @@ jobs:
           yarn install
           git add .
           HUSKY=0 git commit --amend --no-edit
-          git push origin ${{ github.ref }}
+          git push origin ${{ github.ref }} --follow-tags
 
       - name: Authenticate
         run: |
