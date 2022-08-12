@@ -33,8 +33,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --build && vite build",
-    "preview": "vite preview",
-    "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\""
+    "preview": "vite preview"
   },
   "dependencies": {
     "nps": "^5.10.0",
