@@ -24,7 +24,7 @@ jobs:
           HUSKY=0 yarn start version.graduate
           yarn install
           git add .
-          git commit --amend --no-edit;
+          HUSKY=0 git commit --amend --no-edit;
           git push
 
       - name: Authenticate
