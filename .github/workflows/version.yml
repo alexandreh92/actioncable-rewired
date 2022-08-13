@@ -28,8 +28,8 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      # - name: Build
-      #   run: yarn start build
+      - name: Build
+        run: yarn start build
 
       - name: Bump new pre-release version
         run: |
@@ -39,16 +39,16 @@ jobs:
           HUSKY=0 git commit --amend --no-edit
           git push origin ${{ github.ref }} --tags
 
-      # - name: Authenticate
-      #   run: |
-      #     echo "@grandcore:registry=http://registry.npmjs.org/" > .npmrc
-      #     echo "registry=http://registry.npmjs.org/" >> .npmrc
-      #     echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
-      #     npm whoami
-      #   env:
-      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Authenticate
+        run: |
+          echo "@grandcore:registry=http://registry.npmjs.org/" > .npmrc
+          echo "registry=http://registry.npmjs.org/" >> .npmrc
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+          npm whoami
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # - name: Publish
-      #   run: lerna publish from-package --no-verify-access --yes
-      #   env:
-      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish
+        run: lerna publish from-package --no-verify-access --yes
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
