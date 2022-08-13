@@ -1855,6 +1855,16 @@ acorn@^8.4.1, acorn@^8.7.1:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.7.1.tgz#0197122c843d1bf6d0a5e83220a788f278f63c30"
   integrity sha512-Xx54uLJQZ19lKygFXOWsscKUbsBZW0CPykPhVQdhIeIwrbPmJzqeASDInc8nKBnp/JT6igTs82qPXz069H8I/A==
 
+actioncable-rewired@*:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/actioncable-rewired/-/actioncable-rewired-0.1.8.tgz#5d06bd27d92f614e24d4560adfcb03f9fda55f76"
+  integrity sha512-04QCfj8eW+rcfyjtob1el+jWwzq271MrBbbJK9RNwo9BL2VIur79Cpw+Zs8pCyzoccSu6Gct7q+fL/GRSc7Jvw==
+  dependencies:
+    nps "^5.10.0"
+    nps-utils "^1.7.0"
+    typescript "^4.7.2"
+    websocket "^1.0.34"
+
 add-stream@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/add-stream/-/add-stream-1.0.0.tgz#6a7990437ca736d5e1288db92bd3266d5f5cb2aa"
