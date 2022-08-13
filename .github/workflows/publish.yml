@@ -16,6 +16,10 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ env.RELEASE_BRANCH }}
+          fetch-depth: 0
+
+      - name: Fetch older tags
+        run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
 
       - name: Install Packages
         run: yarn install
